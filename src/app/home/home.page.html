@@ -1,20 +1,27 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-title>Página de Login</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <form (submit)="login()">
+    <ion-item>
+      <ion-label position="floating">Username</ion-label>
+      <ion-input type="username" [(ngModel)]="username" name="username" required></ion-input>
+    </ion-item>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+    <ion-item>
+      <ion-label position="floating">Senha</ion-label>
+      <ion-input type="password" [(ngModel)]="senha" name="senha" required></ion-input>
+    </ion-item>
+
+    <ion-button type=" submit" expand= "block" id="open-loading" style="color: white;">Entrar</ion-button>
+    <ion-loading class="custom-loading" trigger="open-loading" message="Loading..." [duration]="500"></ion-loading>
+
+      <ion-text class="ion-text-center" color="white"></ion-text>
+      <p class= "cadastre">Não tem uma conta? <a routerLink="/register">Registre-se</a></p>
+      
+    <!--<ion-button expand="block" type="submit" class="ion-margin-top">Entrar</ion-button>!-->
+  </form>
 </ion-content>

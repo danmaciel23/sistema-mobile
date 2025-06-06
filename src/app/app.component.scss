@@ -1,0 +1,16 @@
+ion-loading.custom-loading {
+  --background: #e3edff;
+  --spinner-color: #1c6dff;
+
+  color: #1c6dff;
+}
+#open-loading{
+    background-color: green;
+    color: white;
+    padding-top: 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    align-items: center;
+    display: flex;
+}
