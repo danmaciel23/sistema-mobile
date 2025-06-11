@@ -4,6 +4,8 @@ import { AlertController } from '@ionic/angular';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-home',
@@ -17,20 +19,15 @@ export class HomePage {
   username: string = '';
   senha: string = '';
 
-  constructor(private alertController: AlertController) {}
+  constructor(private alertController: AlertController, private router: Router) {}
 
   async login() {
-    if (this.username === 'teste' && this.senha === '123') {
-      const alert = await this.alertController.create({
-        header: 'Sucesso',
-        message: 'Login realizado com sucesso!',
-        buttons: ['OK'],
-      });
-      await alert.present();
+    if (this.username === 'teste' && this.senha === '123') {  
+      this.router.navigate(['/veiculo']);
     } else {
       const alert = await this.alertController.create({
         header: 'Erro',
-        message: 'userename ou senha inválidos.',
+        message: 'Usuário ou senha inválidos.',
         buttons: ['OK'],
       });
       await alert.present();
