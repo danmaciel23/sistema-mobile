@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Lista de Veículos</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-list>
+    <ion-card *ngFor="let veiculo of veiculos">
+      <img [src]="veiculo.foto" alt="Foto do veículo" *ngIf="veiculo.foto">
+      <ion-card-header>
+        <ion-card-title>{{ veiculo.marca }} - {{veiculo.modelo}}  </ion-card-title>
+        <ion-card-subtitle>{{ veiculo.ano }} | {{ veiculo.combustivel }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>Cor:</strong> {{ veiculo.cor }}</p>
+        <p><strong>Marca:</strong> {{ veiculo.marca }}</p>
+        <p><strong>Modelo:</strong> {{ veiculo.modelo }}</p>
+        <p><strong>Ano:</strong> {{ veiculo.ano }}</p>
+        <p><strong>Combustível:</strong> {{ veiculo.combustivel }}</p>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+</ion-content>
+
