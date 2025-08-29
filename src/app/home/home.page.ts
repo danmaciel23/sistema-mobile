@@ -1,36 +1,98 @@
 import { Component } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular/standalone';
-import { AlertController } from '@ionic/angular';
-import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
+import { Storage } from '@ionic/storage-angular';
+import { CapacitorHttp, HttpOptions, HttpResponse } from '@capacitor/core';
+import { IonContent, LoadingController, NavController, AlertController, ToastController, IonList, IonItem, IonInput, IonButton, IonToolbar, IonTitle, IonHeader, IonLabel } from '@ionic/angular/standalone';
+import { Usuario } from './usuario.model';
+import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 
 
 @Component({
   selector: 'app-home',
-  standalone: true,
-  imports: [IonicModule, FormsModule, CommonModule], // ← ESSENCIAL!
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
+  imports: [   IonList,
+    IonItem,
+    IonInput,
+    IonButton,
+    IonContent,
+    IonToolbar,
+    IonTitle,
+    IonHeader,    // Adicione IonHeader aqui
+    FormsModule,
+    CommonModule,
+    IonLabel
+  ],
+  providers: [Storage]
 })
-
 export class HomePage {
-  username: string = '';
-  senha: string = '';
+  
+  constructor(
+    public controle_carregamento: LoadingController,
+    public controle_navegacao: NavController,
+    public controle_alerta: AlertController,
+    public controle_toast: ToastController,
+    public storage: Storage
+  ) {}
 
-  constructor(private alertController: AlertController, private router: Router) {}
+  async ngOnInit() {
+    await this.storage.create();
+  }
 
-  async login() {
-    if (this.username === 'teste' && this.senha === '123') {  
-      this.router.navigate(['/veiculo']);
-    } else {
-      const alert = await this.alertController.create({
-        header: 'Erro',
-        message: 'Usuário ou senha inválidos.',
-        buttons: ['OK'],
+  public instancia: { username: string, password: string } = {
+    username: '',
+    password: ''
+  };
+
+  async autenticarUsuario() {
+
+    // Inicializa interface com efeito de carregamento
+    const loading = await this.controle_carregamento.create({message: 'Autenticando...', duration: 15000});
+    await loading.present();
+
+    // Define informações do cabeçalho da requisição
+    const options: HttpOptions = {
+      headers: {'Content-Type': 'application/json'},
+      url: 'http://127.0.0.1:8000/autenticacao-api/',
+      data: this.instancia
+    };
+
+    // Autentica usuário junto a API do sistema web
+    CapacitorHttp.post(options)
+      .then(async (resposta: HttpResponse) => {
+
+        // Verifica se a requisição foi processada com sucesso
+        if(resposta.status == 200) {
+          
+          // Armazena localmente as credenciais de usuário
+          let usuario: Usuario = Object.assign(new Usuario(), resposta.data);
+          await this.storage.set('usuario', usuario);
+          
+          // Finaliza autenticação e redireciona para interface inicial
+          loading.dismiss();
+          this.controle_navegacao.navigateRoot('/veiculo');
+        }
+        else {
+
+          // Finaliza autenticação e apresenta mensagem de erro
+          loading.dismiss();
+          this.apresenta_mensagem(resposta.status);
+        }
+      })
+      .catch(async (erro: any) => {
+        console.log(erro);
+        loading.dismiss();
+        this.apresenta_mensagem(erro?.status);
       });
-      await alert.present();
-    }
+  }
+
+  async apresenta_mensagem(codigo: number) {
+    const mensagem = await this.controle_toast.create({
+      message: `Falha ao autenticar usuário: código ${codigo}`,
+      cssClass: 'ion-text-center',
+      duration: 2000
+    });
+    mensagem.present();
   }
 }
