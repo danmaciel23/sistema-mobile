@@ -5,23 +5,29 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form (submit)="login()" action="app/veiculo/veiculo.page.html">
+  <form (ngSubmit)="autenticarUsuario()">
     <ion-item>
-      <ion-label position="floating">Username</ion-label>
-      <ion-input type="username" [(ngModel)]="username" name="username" required></ion-input>
+      <ion-label position="floating">Usuário</ion-label>
+      <ion-input
+        type="text"
+        [(ngModel)]="instancia.username"
+        name="username"
+        required>
+      </ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="floating">Senha</ion-label>
-      <ion-input type="password" [(ngModel)]="senha" name="senha" required></ion-input>
+      <ion-input
+        type="password"
+        [(ngModel)]="instancia.password"
+        name="password"
+        required>
+      </ion-input>
     </ion-item>
 
-    <ion-button type=" submit" expand= "block" id="open-loading" style="color: white;">Entrar</ion-button>
-    <ion-loading class="custom-loading" trigger="open-loading" message="Loading..." [duration]="500"></ion-loading>
-
-      <ion-text class="ion-text-center" color="white"></ion-text>
-      <p class= "cadastre">Não tem uma conta? <a routerLink="/register">Registre-se</a></p>
-      
-    <!--<ion-button expand="block" type="submit" class="ion-margin-top">Entrar</ion-button>!-->
+    <ion-button expand="block" type="submit" style="color: white;">
+      Entrar
+    </ion-button>
   </form>
 </ion-content>
